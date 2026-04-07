@@ -1,0 +1,12 @@
+{
+  "active_model": "violence_detection_v2",
+  "models": {
+    "violence_detection_v2": {
+      "name": "Violence Detection MobileNet v2",
+      "version": "2.0.0",
+      "format": "keras",
+      "registered_date": "2025-04-08",
+      "status": "active"
+    }
+  }
+}

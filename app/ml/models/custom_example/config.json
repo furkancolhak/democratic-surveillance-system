@@ -1,0 +1,35 @@
+{
+  "model_id": "custom_example",
+  "name": "Custom Violence Detection Model",
+  "version": "1.0.0",
+  "format": "keras",
+  "path": "model.keras",
+  
+  "input": {
+    "type": "video_sequence",
+    "shape": [20, 128, 128, 3],
+    "preprocessing": {
+      "resize": [128, 128],
+      "normalization": "imagenet",
+      "color_space": "RGB",
+      "sequence_length": 20
+    }
+  },
+  
+  "output": {
+    "type": "classification",
+    "classes": ["Safe", "Violent"],
+    "threshold": 0.7
+  },
+  
+  "custom_preprocessor": "preprocessor.py",
+  
+  "metadata": {
+    "author": "Custom Team",
+    "description": "Example custom model with custom preprocessing",
+    "training_date": "2025-01-01",
+    "accuracy": 0.97,
+    "framework": "TensorFlow/Keras",
+    "notes": "This is an example showing how to use custom preprocessing"
+  }
+}

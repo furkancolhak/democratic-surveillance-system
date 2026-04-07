@@ -1,0 +1,36 @@
+{
+  "model_id": "violence_detection_v2",
+  "name": "Violence Detection MobileNet v2",
+  "version": "2.0.0",
+  "format": "keras",
+  "path": "model.keras",
+  
+  "input": {
+    "type": "video_sequence",
+    "shape": [16, 64, 64, 3],
+    "preprocessing": {
+      "resize": [64, 64],
+      "normalization": "0-1",
+      "color_space": "RGB",
+      "sequence_length": 16
+    }
+  },
+  
+  "output": {
+    "type": "classification",
+    "classes": ["NonViolence", "Violence"],
+    "threshold": 0.5
+  },
+  
+  "custom_preprocessor": null,
+  
+  "metadata": {
+    "author": "Surveillance Team",
+    "description": "MobileNet + BiLSTM architecture for real-time violence detection",
+    "training_date": "2024-01-15",
+    "accuracy": 0.95,
+    "framework": "TensorFlow/Keras",
+    "input_fps": 30,
+    "notes": "Trained on custom violence dataset with data augmentation"
+  }
+}
