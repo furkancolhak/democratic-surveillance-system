@@ -474,15 +474,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
-## 📞 Support
-
-For issues, questions, or contributions:
-
-- 📧 Email: support@example.com
-- 🐛 Issues: GitHub Issues
-- 📖 Docs: [docs/](docs/)
-
----
 
 ## ⚠️ Security Notice
 
