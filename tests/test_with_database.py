@@ -14,6 +14,7 @@ import tempfile
 import shutil
 from datetime import datetime
 import uuid
+from sqlalchemy import text
 
 # Import components
 try:
@@ -38,7 +39,7 @@ class TestDatabaseConnection(unittest.TestCase):
         
         try:
             session = db_manager.get_session()
-            result = session.execute('SELECT 1').scalar()
+            result = session.execute(text('SELECT 1')).scalar()
             session.close()
             
             self.assertEqual(result, 1)
@@ -54,15 +55,16 @@ class TestMasterUserManager(unittest.TestCase):
     def setUp(self):
         self.manager = MasterUserManager()
         self.test_email = f"test_{uuid.uuid4().hex[:8]}@example.com"
+        self.test_username = f"master_{uuid.uuid4().hex[:8]}"
         
     def test_create_master_user(self):
         """Test master user creation"""
         print("\n🧪 Testing: Master user creation...")
         
-        result = self.manager.register_master_user(
+        result = self.manager.create_master_user(
+            username=self.test_username,
             email=self.test_email,
-            password="TestPassword123!",
-            name="Test Master"
+            password="TestPassword123!"
         )
         
         self.assertIsNotNone(result)
@@ -76,10 +78,10 @@ class TestMasterUserManager(unittest.TestCase):
         
         # Create user
         password = "TestPassword123!"
-        result = self.manager.register_master_user(
+        result = self.manager.create_master_user(
+            username=self.test_username,
             email=self.test_email,
-            password=password,
-            name="Test Master"
+            password=password
         )
         
         # Get TOTP code
@@ -89,10 +91,11 @@ class TestMasterUserManager(unittest.TestCase):
         totp_code = totp.now()
         
         # Login
-        login_result = self.manager.login(self.test_email, password, totp_code)
+        login_result = self.manager.authenticate(self.test_username, password, totp_code)
         
         self.assertIsNotNone(login_result)
-        self.assertIn('token', login_result)
+        self.assertIn('id', login_result)
+        self.assertEqual(login_result['username'], self.test_username)
         print(f"   ✅ Master user logged in successfully")
 
 
@@ -107,10 +110,10 @@ class TestMemberAuth(unittest.TestCase):
         
         # Create a master user first
         self.master_email = f"master_{uuid.uuid4().hex[:8]}@example.com"
-        master_result = self.master_manager.register_master_user(
+        master_result = self.master_manager.create_master_user(
+            username=f"master_{uuid.uuid4().hex[:8]}",
             email=self.master_email,
-            password="MasterPass123!",
-            name="Test Master"
+            password="MasterPass123!"
         )
         self.master_id = uuid.UUID(master_result['id'])
         
@@ -191,16 +194,19 @@ class TestVotingSystem(unittest.TestCase):
         self.crypto = VideoCrypto(encrypted_dir=self.temp_dir)
         
         # Create master user
-        master_result = self.master_manager.register_master_user(
+        master_result = self.master_manager.create_master_user(
+            username=f"master_{uuid.uuid4().hex[:8]}",
             email=f"master_{uuid.uuid4().hex[:8]}@example.com",
-            password="MasterPass123!",
-            name="Test Master"
+            password="MasterPass123!"
         )
         self.master_id = uuid.UUID(master_result['id'])
         
-        # Create 5 members
+        # Create enough members to ensure we can reach majority threshold
+        existing_active = len(self.member_auth.get_active_members())
+        members_to_create = max(5, existing_active + 1)
+
         self.members = []
-        for i in range(5):
+        for i in range(members_to_create):
             result = self.member_auth.register_member(
                 email=f"voter{i}_{uuid.uuid4().hex[:8]}@example.com",
                 name=f"Voter {i}",

@@ -1,0 +1,21 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+.venv310/
+venv/
+
+# Local environment files
+.env
+
+# Runtime artifacts
+totp_qr_codes/
+encrypted_videos/
+decrypted_videos/
+violence_recordings/
+
+# Test reports and logs
+tests/test_report.json
+*.log
