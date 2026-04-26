@@ -1,16 +1,16 @@
 # ML Module (2-Class Violence Classification)
 
-Bu modül, publication odaklı 2-class (Normal/Violence) deney akışı için hazırlanmıştır.
+This module is prepared for publication-focused 2-class (Normal/Violence) experiments.
 
-## Sabit Protokol
+## Fixed Protocol
 
 - Task: `normal` vs `violence`
 - Seed: `49`
 - Split: `70/15/15` (train/val/test)
-- Split yöntemi: stratified
-- SCVD `weaponized` etiketi: ana deney dışında
+- Split method: stratified
+- SCVD `weaponized` label: excluded from the main experiment
 
-## Klasör Yapısı
+## Directory Structure
 
 ```
 ml_module/
@@ -32,29 +32,29 @@ ml_module/
   evaluate.py
 ```
 
-## Dataset Yerleştirme Notu
+## Dataset Placement Notes
 
-Her kaynak dataset için klasör yapısı en azından şu etiketleri içermelidir:
+Each source dataset should contain at least the following class folders:
 - `normal`
 - `violence`
 
-SCVD içindeki `weaponized` örnekler ana protokol kapsamında otomatik dışlanır.
+`weaponized` samples in SCVD are automatically excluded in the main protocol.
 
-## Çalıştırma
+## Usage
 
-Veriyi hazırlama:
+Prepare data:
 
 ```bash
 python ml_module/prepare_data.py --config ml_module/configs/experiment_config.yaml
 ```
 
-Eğitim başlatma (iskelet):
+Start training (scaffold):
 
 ```bash
 python ml_module/train.py --config ml_module/configs/experiment_config.yaml --model bilstm
 ```
 
-Değerlendirme (iskelet):
+Run evaluation (scaffold):
 
 ```bash
 python ml_module/evaluate.py --config ml_module/configs/experiment_config.yaml --split test
