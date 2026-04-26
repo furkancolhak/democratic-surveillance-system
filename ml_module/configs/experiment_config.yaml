@@ -1,0 +1,52 @@
+experiment:
+  name: violence_2class_baseline
+  seed: 49
+
+data:
+  task: binary
+  classes:
+    - normal
+    - violence
+  split:
+    train: 0.70
+    val: 0.15
+    test: 0.15
+    stratified: true
+  image_size:
+    width: 64
+    height: 64
+  sequence_length: 16
+
+paths:
+  raw_root: ml_module/data/raw
+  processed_root: ml_module/data/processed
+  manifests_dir: ml_module/data/processed/manifests
+
+datasets:
+  scvd:
+    enabled: true
+    path: scvd
+    include_labels:
+      - normal
+      - violence
+    exclude_labels:
+      - weaponized
+  rwf2000:
+    enabled: true
+    path: rwf2000
+    include_labels:
+      - normal
+      - violence
+  real_life_violence:
+    enabled: true
+    path: real_life_violence
+    include_labels:
+      - normal
+      - violence
+
+models:
+  available:
+    - cnn
+    - lstm
+    - bilstm
+  default: bilstm

@@ -19,3 +19,7 @@ violence_recordings/
 # Test reports and logs
 tests/test_report.json
 *.log
+
+# ML module data artifacts
+ml_module/data/raw/
+ml_module/data/processed/
